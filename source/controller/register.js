@@ -16,6 +16,22 @@ const register = {
       failed(res, 404, error);
     }
   },
+  getDetails: (req, res) => {
+    try {
+      const { id } = req.params;
+          registermodel
+            .getDetails(id)
+            .then((result) => {
+              success(res, result, 200, "Get Details User Success");
+            })
+            .catch((err) => {
+              failed(res, 404, err);
+            }); 
+      ;
+    } catch (error) {
+      failed(res, 404, error);
+    }
+  },
   insert: (req, res) => {
     try {
       const { body } = req;
@@ -40,13 +56,38 @@ const register = {
       failed(res, 401, error);
     }
   },
+  update: (req, res) => {
+    try {
+      const { body } = req;
+     
+          const data = {
+            username: body.username,
+            numberPhone: body.numberPhone,
+            // password: hash,
+            image: req.file.filename,
+            displayName: body.displayName,
+            bio: body.bio,
+            id: req.params.id
+          };
+
+          registermodel.update(data).then((result) => {
+            success(res, result, 'success');
+          }).catch((error) => {
+            failed(res, 404, error);
+          });
+        }
+      
+     catch (err) {
+      failed(res, 401, err);
+    }
+  },
   login: (req, res) => {
     try {
       const { body } = req;
       console.log(body);
       registermodel.login(body).then((result) => {
         if (result.length <= 0) {
-          res.status(404).json('email not found');
+          res.status(404).json('number not found');
         } else {
           const hash = result[0].password;
           bcrypt.compare(body.password, hash, (error, checkpass) => {

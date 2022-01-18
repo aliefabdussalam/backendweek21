@@ -10,6 +10,7 @@ const db = require('./source/config/db');
 
 
 const app = express()
+app.use(express.static(`${__dirname}/upload`));
 app.use(cors())
 app.use((req, res, next) => {
     res.header('Access-Control-Allow-Origin', '*');
@@ -46,8 +47,7 @@ io.on("connection", (socket) => {
     socket.on("get-message", ({receiver, sender}) => {
         db.query(`
         select * from message where (sender="${sender}" and receiver="${receiver}") or (sender="${receiver}" and receiver="${sender}") `, (err, result) => {
-            io.to(sender).emit('history-message', result)
-            console.log(result)
+            io.to(sender).emit('history-message', result)           
         })
     })
     socket.on("send-user", (value) => {
@@ -56,7 +56,6 @@ io.on("connection", (socket) => {
     })
     socket.on("send-message-private", (payload) => {
         const { room, msg, username } = payload
-        console.log(msg)
         io.to(room).emit("get-message-private", {msg, username})
     })
 

@@ -10,6 +10,19 @@ const registermodel = {
       }
     });
   }),
+  getDetails: (id) =>
+    new Promise((resolve, reject) => {
+      db.query(
+        `SELECT * FROM users WHERE id='${id}'`,
+        (err, result) => {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    }),
   insert: (data) => new Promise((resolve, reject) => {
     const {
       id, username, numberPhone, password,
@@ -34,5 +47,19 @@ const registermodel = {
       }
     });
   }),
+  update: (data) => new Promise(
+    (resolve, reject) => {
+      const {
+        username, numberPhone, image, displayName, bio, id
+      } = data;
+      db.query(`update users set username="${username}", image="${image}",number_phone="${numberPhone}", display_name="${displayName}", bio="${bio}" where id="${id}"`, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      });
+    },
+  ),
 };
 module.exports = registermodel;
