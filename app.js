@@ -67,7 +67,7 @@ io.on("connection", (socket) => {
 
 
 const PORT = 8800
-httpServer.listen(process.env.PORT | PORT, () => {
+httpServer.listen(process.env.PORT || PORT, () => {
     console.log(`service running on port ${PORT}`)
 })
 module.exports = app;
