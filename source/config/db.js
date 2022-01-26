@@ -1,10 +1,13 @@
+require('dotenv').config()
 const mysql = require('mysql2')
-require('dotenv')
+
 
 const connection = mysql.createConnection({
-    host: "localhost",
-    user: "root",
-    database: 'live_chat'
+    host: process.env.db_host,
+    user: process.env.db_username,
+    password: process.env.db_password,
+    database: process.env.db_name
+    
 })
 
 connection.connect((err) => {
