@@ -16,6 +16,30 @@ const register = {
       failed(res, 404, error);
     }
   },
+  getlist: (req, res) => {
+    try {
+      const { query } = req;
+      const search = query.search === undefined ? "" : query.search;
+      const field = query.field === undefined ? "id" : query.field;
+      const typeSort = query.sort === undefined ? "ASC" : query.sort;
+      console.log(search)
+      registermodel
+          .getlist(search, field, typeSort)
+          .then(async (response) => {
+              const result = {
+                  data: response,
+              };
+              success(res.status(200), result, "get all users success");
+          })
+          .catch((err) => {
+              console.log(err)
+              failed(res.status(401), 401, err);
+          });
+  } catch (error) {
+      
+      failed(res.status(401), 401, error);
+  }
+  },
   getDetails: (req, res) => {
     try {
       const { id } = req.params;

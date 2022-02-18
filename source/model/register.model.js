@@ -10,6 +10,16 @@ const registermodel = {
       }
     });
   }),
+  getlist : (search, field, typeSort) => new Promise((resolve, reject) => {
+    db.query(`SELECT * FROM users WHERE username LIKE "%${search}%" ORDER BY ${field} ${typeSort}`,
+    (err, result) => {
+      if (err) {
+        reject(err)
+      } else {
+        resolve(result)
+      }
+    })
+  }),
   getDetails: (id) =>
     new Promise((resolve, reject) => {
       db.query(
@@ -22,7 +32,7 @@ const registermodel = {
           }
         }
       );
-    }),
+    }), 
   insert: (data) => new Promise((resolve, reject) => {
     const {
       id, username, numberPhone, password,
